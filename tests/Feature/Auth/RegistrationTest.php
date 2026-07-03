@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Auth;
 
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -27,5 +28,24 @@ class RegistrationTest extends TestCase
 
         $this->assertAuthenticated();
         $response->assertRedirect(route('dashboard', absolute: false));
+    }
+
+    public function test_registration_seeds_default_categories(): void
+    {
+        $this->post('/register', [
+            'name' => 'Test User',
+            'email' => 'seed@example.com',
+            'password' => 'password',
+            'password_confirmation' => 'password',
+        ]);
+
+        $user = User::where('email', 'seed@example.com')->firstOrFail();
+
+        // Default set contains both income and expense categories.
+        $this->assertGreaterThanOrEqual(9, $user->categories()->count());
+        $this->assertDatabaseHas('categories', [
+            'user_id' => $user->id,
+            'name' => 'Makanan & Minuman',
+        ]);
     }
 }

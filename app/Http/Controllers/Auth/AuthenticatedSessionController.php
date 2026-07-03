@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Middleware\EnsureUserTransactionsViewEnabled;
 use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -42,6 +43,10 @@ class AuthenticatedSessionController extends Controller
     public function destroy(Request $request): RedirectResponse
     {
         Auth::guard('web')->logout();
+
+        // Explicitly drop the admin "view user transactions" toggle so it
+        // never survives a session (defence in depth; invalidate() also wipes it).
+        $request->session()->forget(EnsureUserTransactionsViewEnabled::SESSION_KEY);
 
         $request->session()->invalidate();
 

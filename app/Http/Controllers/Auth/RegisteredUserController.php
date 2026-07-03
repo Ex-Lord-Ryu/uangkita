@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Actions\SeedDefaultCategories;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
@@ -29,7 +30,7 @@ class RegisteredUserController extends Controller
      *
      * @throws ValidationException
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request, SeedDefaultCategories $seedDefaultCategories): RedirectResponse
     {
         $request->validate([
             'name' => 'required|string|max:255',
@@ -42,6 +43,8 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+
+        $seedDefaultCategories->handle($user);
 
         event(new Registered($user));
 

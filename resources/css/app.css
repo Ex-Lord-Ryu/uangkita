@@ -1,3 +1,68 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+@plugin '@tailwindcss/forms';
+
+@source '../views';
+@source '../**/*.jsx';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+    --font-sans: 'Figtree', ui-sans-serif, system-ui, -apple-system,
+        'Segoe UI', Roboto, sans-serif;
+
+    /* Brand palette */
+    --color-brand-50: #eef2ff;
+    --color-brand-100: #e0e7ff;
+    --color-brand-200: #c7d2fe;
+    --color-brand-300: #a5b4fc;
+    --color-brand-400: #818cf8;
+    --color-brand-500: #6366f1;
+    --color-brand-600: #4f46e5;
+    --color-brand-700: #4338ca;
+    --color-brand-800: #3730a3;
+    --color-brand-900: #312e81;
+}
+
+/* Smooth base */
+html {
+    scroll-behavior: smooth;
+    width: 100%;
+    max-width: 100%;
+    min-height: 100%;
+    overflow-x: hidden;
+    overscroll-behavior-x: none;
+    background-color: rgb(249 250 251);
+}
+
+body {
+    width: 100%;
+    max-width: 100%;
+    min-height: 100%;
+    overflow-x: hidden;
+    overscroll-behavior-x: none;
+    font-family: var(--font-sans);
+    background-color: rgb(249 250 251);
+}
+
+#app {
+    min-height: 100vh;
+    overflow-x: clip;
+    background-color: rgb(249 250 251);
+}
+
+html.dark,
+html.dark body,
+html.dark #app {
+    background-color: rgb(17 24 39);
+}
+
+/* Thin scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgb(148 163 184 / 0.5);
+    border-radius: 9999px;
+}

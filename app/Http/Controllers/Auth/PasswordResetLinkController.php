@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Notifications\ResetPasswordCodeNotification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
@@ -33,19 +36,38 @@ class PasswordResetLinkController extends Controller
             'email' => 'required|email',
         ]);
 
-        // We will send the password reset link to this user. Once we have attempted
-        // to send the link, we will examine the response then see the message we
-        // need to show to the user. Finally, we'll send out a proper response.
-        $status = Password::sendResetLink(
-            $request->only('email')
-        );
+        $broker = Password::broker();
+        $user = $broker->getUser($request->only('email'));
 
-        if ($status == Password::RESET_LINK_SENT) {
-            return back()->with('status', __($status));
+        if (is_null($user)) {
+            throw ValidationException::withMessages([
+                'email' => [trans(Password::INVALID_USER)],
+            ]);
         }
 
-        throw ValidationException::withMessages([
-            'email' => [trans($status)],
-        ]);
+        if ($broker->getRepository()->recentlyCreatedToken($user)) {
+            throw ValidationException::withMessages([
+                'email' => [trans(Password::RESET_THROTTLED)],
+            ]);
+        }
+
+        $code = (string) random_int(100000, 999999);
+        $email = $user->getEmailForPasswordReset();
+        $brokerName = config('auth.defaults.passwords');
+        $table = config("auth.passwords.{$brokerName}.table");
+
+        DB::table($table)->updateOrInsert(
+            ['email' => $email],
+            [
+                'token' => Hash::make($code),
+                'created_at' => now(),
+            ],
+        );
+
+        $user->notify(new ResetPasswordCodeNotification($code));
+
+        return redirect()
+            ->route('password.reset', ['email' => $email])
+            ->with('status', 'Kode reset password sudah dikirim ke email kamu.');
     }
 }

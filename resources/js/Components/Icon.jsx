@@ -10,9 +10,10 @@ const PATHS = {
     settings:
         'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z',
     settingsDot: 'M15 12a3 3 0 11-6 0 3 3 0 016 0z',
-    eye: 'M15 12a3 3 0 11-6 0 3 3 0 016 0z',
-    eyeOutline:
-        'M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z',
+    eye: 'M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z',
+    eyePupil: 'M15 12a3 3 0 11-6 0 3 3 0 016 0z',
+    eyeOff:
+        'M3 3l18 18M10.584 10.587A2 2 0 0012 14a2 2 0 001.414-.586M9.88 5.09A9.97 9.97 0 0112 5c4.478 0 8.268 2.943 9.542 7a9.964 9.964 0 01-3.043 4.455M6.228 6.228A9.958 9.958 0 002.458 12C3.732 16.057 7.523 19 12 19c1.368 0 2.67-.273 3.857-.768',
     logout: 'M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1',
     menu: 'M4 6h16M4 12h16M4 18h16',
     close: 'M6 18L18 6M6 6l12 12',
@@ -36,7 +37,7 @@ const PATHS = {
 
 export default function Icon({ name, className = 'h-5 w-5', ...props }) {
     const path = PATHS[name];
-    const dot = name === 'settings' ? PATHS.settingsDot : null;
+    const extraPath = name === 'settings' ? PATHS.settingsDot : name === 'eye' ? PATHS.eyePupil : null;
 
     return (
         <svg
@@ -48,8 +49,8 @@ export default function Icon({ name, className = 'h-5 w-5', ...props }) {
             {...props}
         >
             <path strokeLinecap="round" strokeLinejoin="round" d={path} />
-            {dot && (
-                <path strokeLinecap="round" strokeLinejoin="round" d={dot} />
+            {extraPath && (
+                <path strokeLinecap="round" strokeLinejoin="round" d={extraPath} />
             )}
         </svg>
     );

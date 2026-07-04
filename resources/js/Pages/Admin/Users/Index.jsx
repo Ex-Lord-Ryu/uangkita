@@ -5,6 +5,7 @@ import Card from '@/Components/ui/Card';
 import Button from '@/Components/ui/Button';
 import Badge from '@/Components/ui/Badge';
 import Modal from '@/Components/Modal';
+import PasswordInput from '@/Components/PasswordInput';
 import TextInput from '@/Components/TextInput';
 import InputLabel from '@/Components/InputLabel';
 import InputError from '@/Components/InputError';
@@ -230,26 +231,26 @@ export default function AdminUsers({ users, filters, canManageRoles }) {
                             htmlFor="password"
                             value={editing ? 'Password (kosongkan jika tetap)' : 'Password'}
                         />
-                        <TextInput
+                        <PasswordInput
                             id="password"
-                            type="password"
                             autoComplete="new-password"
                             value={form.data.password}
                             onChange={(e) => form.setData('password', e.target.value)}
-                            className="mt-1 block w-full rounded-xl"
+                            containerClassName="mt-1"
+                            className="block w-full rounded-xl"
                         />
                         <InputError message={form.errors.password} className="mt-1" />
                     </div>
 
                     <div className="mb-4">
                         <InputLabel htmlFor="password_confirmation" value="Konfirmasi Password" />
-                        <TextInput
+                        <PasswordInput
                             id="password_confirmation"
-                            type="password"
                             autoComplete="new-password"
                             value={form.data.password_confirmation}
                             onChange={(e) => form.setData('password_confirmation', e.target.value)}
-                            className="mt-1 block w-full rounded-xl"
+                            containerClassName="mt-1"
+                            className="block w-full rounded-xl"
                         />
                     </div>
 

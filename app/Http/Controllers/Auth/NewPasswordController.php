@@ -23,7 +23,7 @@ class NewPasswordController extends Controller
     {
         return Inertia::render('Auth/ResetPassword', [
             'email' => $request->email,
-            'token' => $request->route('token'),
+            'status' => session('status'),
         ]);
     }
 
@@ -35,8 +35,8 @@ class NewPasswordController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'token' => 'required',
             'email' => 'required|email',
+            'code' => 'required|digits:6',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
@@ -44,7 +44,12 @@ class NewPasswordController extends Controller
         // will update the password on an actual user model and persist it to the
         // database. Otherwise we will parse the error and return the response.
         $status = Password::reset(
-            $request->only('email', 'password', 'password_confirmation', 'token'),
+            [
+                'email' => $request->email,
+                'password' => $request->password,
+                'password_confirmation' => $request->password_confirmation,
+                'token' => $request->code,
+            ],
             function ($user) use ($request) {
                 $user->forceFill([
                     'password' => Hash::make($request->password),
@@ -63,7 +68,11 @@ class NewPasswordController extends Controller
         }
 
         throw ValidationException::withMessages([
-            'email' => [trans($status)],
+            $status === Password::INVALID_TOKEN ? 'code' : 'email' => [
+                $status === Password::INVALID_TOKEN
+                    ? 'Kode reset password tidak valid atau sudah kedaluwarsa.'
+                    : trans($status),
+            ],
         ]);
     }
 }

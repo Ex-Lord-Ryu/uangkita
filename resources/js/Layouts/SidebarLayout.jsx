@@ -134,7 +134,7 @@ export default function SidebarLayout({ title, header, actions, children }) {
     );
 
     return (
-        <div className="min-h-screen overflow-x-hidden bg-gray-50 dark:bg-gray-900">
+        <div className="min-h-screen overflow-x-clip bg-gray-50 dark:bg-gray-900">
             {/* Desktop sidebar */}
             <aside
                 className={`fixed inset-y-0 left-0 z-30 hidden border-r border-gray-200 bg-white transition-all duration-200 lg:block dark:border-gray-700/60 dark:bg-gray-800 ${
@@ -159,12 +159,16 @@ export default function SidebarLayout({ title, header, actions, children }) {
 
             {/* Main column */}
             <div
-                className={`flex min-h-screen min-w-0 flex-col overflow-x-hidden transition-all duration-200 ${
+                className={`flex min-h-screen min-w-0 flex-col overflow-x-clip transition-all duration-200 ${
                     collapsed ? 'lg:pl-20' : 'lg:pl-64'
                 }`}
             >
                 {/* Top bar */}
-                <header className="sticky top-0 z-20 flex h-16 w-full min-w-0 items-center gap-3 border-b border-gray-200 bg-white/80 px-4 backdrop-blur sm:px-6 dark:border-gray-700/60 dark:bg-gray-800/80">
+                <header
+                    className={`fixed left-0 right-0 top-0 z-30 flex h-16 min-w-0 items-center gap-3 border-b border-gray-200 bg-white/90 px-4 shadow-sm backdrop-blur transition-all duration-200 sm:px-6 dark:border-gray-700/60 dark:bg-gray-800/90 ${
+                        collapsed ? 'lg:left-20' : 'lg:left-64'
+                    }`}
+                >
                     <button
                         onClick={() => setMobileOpen(true)}
                         className="rounded-lg p-2 text-gray-500 hover:bg-gray-100 lg:hidden dark:hover:bg-gray-700"
@@ -217,6 +221,7 @@ export default function SidebarLayout({ title, header, actions, children }) {
                         </Dropdown.Content>
                     </Dropdown>
                 </header>
+                <div className="h-16 shrink-0" aria-hidden="true" />
 
                 {/* Page header (optional) */}
                 {(header || actions) && (
@@ -227,7 +232,7 @@ export default function SidebarLayout({ title, header, actions, children }) {
                 )}
 
                 {/* Content */}
-                <main className="min-w-0 flex-1 overflow-x-hidden px-4 py-6 sm:px-6">{children}</main>
+                <main className="min-w-0 flex-1 overflow-x-clip px-4 py-6 sm:px-6">{children}</main>
             </div>
 
             <Toast />

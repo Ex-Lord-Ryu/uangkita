@@ -24,12 +24,26 @@ export default function Button({
     as,
     className = '',
     disabled,
+    loading = false,
+    loadingText = 'Memproses...',
     children,
     ...props
 }) {
     const classes =
         `inline-flex items-center justify-center rounded-xl font-medium transition focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 disabled:opacity-50 disabled:pointer-events-none ${VARIANTS[variant]} ${SIZES[size]} ` +
         className;
+    const isDisabled = disabled || loading;
+    const content = loading ? (
+        <>
+            <span
+                className="h-4 w-4 animate-spin rounded-full border-2 border-current border-r-transparent"
+                aria-hidden="true"
+            />
+            <span>{loadingText}</span>
+        </>
+    ) : (
+        children
+    );
 
     if (href) {
         return (
@@ -38,16 +52,17 @@ export default function Button({
                 method={method}
                 as={as}
                 className={classes}
+                aria-disabled={isDisabled}
                 {...props}
             >
-                {children}
+                {content}
             </Link>
         );
     }
 
     return (
-        <button className={classes} disabled={disabled} {...props}>
-            {children}
+        <button className={classes} disabled={isDisabled} {...props}>
+            {content}
         </button>
     );
 }

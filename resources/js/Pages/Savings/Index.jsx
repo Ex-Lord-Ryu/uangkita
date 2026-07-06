@@ -90,6 +90,10 @@ export default function SavingsIndex({
     const submitAccount = (e) => {
         e.preventDefault();
 
+        if (accountForm.processing) {
+            return;
+        }
+
         const options = {
             preserveScroll: true,
             onSuccess: () => {
@@ -107,6 +111,10 @@ export default function SavingsIndex({
 
     const submitMutation = (e) => {
         e.preventDefault();
+
+        if (mutationForm.processing || !mutationTarget) {
+            return;
+        }
 
         mutationForm.post(route('savings.transactions.store', mutationTarget.id), {
             preserveScroll: true,
@@ -389,8 +397,27 @@ export default function SavingsIndex({
                 )}
             </div>
 
-            <Modal show={showAccountModal} onClose={() => setShowAccountModal(false)}>
-                <form onSubmit={submitAccount} className="p-6">
+            <Modal
+                show={showAccountModal}
+                onClose={() => setShowAccountModal(false)}
+                closeable={!accountForm.processing}
+            >
+                <form
+                    onSubmit={submitAccount}
+                    className="relative p-6"
+                    aria-busy={accountForm.processing}
+                >
+                    {accountForm.processing && (
+                        <div className="absolute inset-0 z-10 flex items-center justify-center rounded-lg bg-white/70 backdrop-blur-[1px] dark:bg-gray-800/70">
+                            <div className="flex items-center gap-3 rounded-xl bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-lg ring-1 ring-gray-200 dark:bg-gray-900 dark:text-gray-200 dark:ring-gray-700">
+                                <span
+                                    className="h-5 w-5 animate-spin rounded-full border-2 border-brand-600 border-r-transparent"
+                                    aria-hidden="true"
+                                />
+                                Rekening tabungan sedang disimpan...
+                            </div>
+                        </div>
+                    )}
                     <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-gray-100">
                         {editing ? 'Edit Rekening Tabungan' : 'Tambah Rekening Tabungan'}
                     </h2>
@@ -534,18 +561,42 @@ export default function SavingsIndex({
                             type="button"
                             variant="secondary"
                             onClick={() => setShowAccountModal(false)}
+                            disabled={accountForm.processing}
                         >
                             Batal
                         </Button>
-                        <Button disabled={accountForm.processing}>
-                            {accountForm.processing ? 'Menyimpan...' : 'Simpan'}
+                        <Button
+                            loading={accountForm.processing}
+                            loadingText="Menyimpan..."
+                        >
+                            Simpan
                         </Button>
                     </div>
                 </form>
             </Modal>
 
-            <Modal show={!!mutationTarget} onClose={() => setMutationTarget(null)} maxWidth="md">
-                <form onSubmit={submitMutation} className="p-6">
+            <Modal
+                show={!!mutationTarget}
+                onClose={() => setMutationTarget(null)}
+                maxWidth="md"
+                closeable={!mutationForm.processing}
+            >
+                <form
+                    onSubmit={submitMutation}
+                    className="relative p-6"
+                    aria-busy={mutationForm.processing}
+                >
+                    {mutationForm.processing && (
+                        <div className="absolute inset-0 z-10 flex items-center justify-center rounded-lg bg-white/70 backdrop-blur-[1px] dark:bg-gray-800/70">
+                            <div className="flex items-center gap-3 rounded-xl bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-lg ring-1 ring-gray-200 dark:bg-gray-900 dark:text-gray-200 dark:ring-gray-700">
+                                <span
+                                    className="h-5 w-5 animate-spin rounded-full border-2 border-brand-600 border-r-transparent"
+                                    aria-hidden="true"
+                                />
+                                Mutasi tabungan sedang disimpan...
+                            </div>
+                        </div>
+                    )}
                     <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
                         {mutationForm.data.type === 'deposit' ? 'Setor Tabungan' : 'Tarik Tabungan'}
                     </h2>
@@ -617,11 +668,15 @@ export default function SavingsIndex({
                             type="button"
                             variant="secondary"
                             onClick={() => setMutationTarget(null)}
+                            disabled={mutationForm.processing}
                         >
                             Batal
                         </Button>
-                        <Button disabled={mutationForm.processing}>
-                            {mutationForm.processing ? 'Menyimpan...' : 'Simpan'}
+                        <Button
+                            loading={mutationForm.processing}
+                            loadingText="Menyimpan..."
+                        >
+                            Simpan
                         </Button>
                     </div>
                 </form>

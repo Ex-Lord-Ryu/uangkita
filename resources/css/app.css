@@ -56,6 +56,111 @@ html.dark #app {
     background-color: rgb(17 24 39);
 }
 
+/* Clear tap/click feedback for touch-heavy users. */
+:where(
+    button,
+    a[href],
+    [role='button'],
+    input[type='button'],
+    input[type='submit'],
+    input[type='reset'],
+    [data-tap-feedback]
+) {
+    -webkit-tap-highlight-color: transparent;
+}
+
+:where(
+    button:not(:disabled),
+    a[href],
+    [role='button']:not([aria-disabled='true']),
+    input[type='button']:not(:disabled),
+    input[type='submit']:not(:disabled),
+    input[type='reset']:not(:disabled),
+    [data-tap-feedback]:not([aria-disabled='true'])
+) {
+    touch-action: manipulation;
+}
+
+:where(
+    button:not(:disabled),
+    a[href],
+    [role='button']:not([aria-disabled='true']),
+    input[type='button']:not(:disabled),
+    input[type='submit']:not(:disabled),
+    input[type='reset']:not(:disabled),
+    [data-tap-feedback]:not([aria-disabled='true'])
+):active,
+:where(
+    button:not(:disabled),
+    a[href],
+    [role='button']:not([aria-disabled='true']),
+    input[type='button']:not(:disabled),
+    input[type='submit']:not(:disabled),
+    input[type='reset']:not(:disabled),
+    [data-tap-feedback]:not([aria-disabled='true'])
+).tap-feedback-active {
+    translate: 0 1px;
+    scale: 0.98;
+    filter: brightness(0.92) saturate(1.08);
+    box-shadow:
+        inset 0 0 0 999px rgb(15 23 42 / 0.08),
+        0 0 0 3px rgb(99 102 241 / 0.24);
+    transition-duration: 150ms;
+    transition-property:
+        background-color, border-color, box-shadow, color, filter, opacity,
+        scale, translate;
+    transition-timing-function: ease-out;
+}
+
+.dark
+    :where(
+        button:not(:disabled),
+        a[href],
+        [role='button']:not([aria-disabled='true']),
+        input[type='button']:not(:disabled),
+        input[type='submit']:not(:disabled),
+        input[type='reset']:not(:disabled),
+        [data-tap-feedback]:not([aria-disabled='true'])
+    ):active,
+.dark
+    :where(
+        button:not(:disabled),
+        a[href],
+        [role='button']:not([aria-disabled='true']),
+        input[type='button']:not(:disabled),
+        input[type='submit']:not(:disabled),
+        input[type='reset']:not(:disabled),
+        [data-tap-feedback]:not([aria-disabled='true'])
+    ).tap-feedback-active {
+    box-shadow:
+        inset 0 0 0 999px rgb(255 255 255 / 0.12),
+        0 0 0 3px rgb(129 140 248 / 0.32);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    :where(
+        button:not(:disabled),
+        a[href],
+        [role='button']:not([aria-disabled='true']),
+        input[type='button']:not(:disabled),
+        input[type='submit']:not(:disabled),
+        input[type='reset']:not(:disabled),
+        [data-tap-feedback]:not([aria-disabled='true'])
+    ):active,
+    :where(
+        button:not(:disabled),
+        a[href],
+        [role='button']:not([aria-disabled='true']),
+        input[type='button']:not(:disabled),
+        input[type='submit']:not(:disabled),
+        input[type='reset']:not(:disabled),
+        [data-tap-feedback]:not([aria-disabled='true'])
+    ).tap-feedback-active {
+        scale: 1;
+        transition-duration: 0ms;
+    }
+}
+
 /* Thin scrollbar */
 ::-webkit-scrollbar {
     width: 8px;

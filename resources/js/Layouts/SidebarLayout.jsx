@@ -64,7 +64,7 @@ export default function SidebarLayout({ title, header, actions, children }) {
         adminMenu.splice(2, 0, {
             href: route('admin.user-transactions.index'),
             label: 'Transaksi User',
-            icon: 'eyeOutline',
+            icon: 'eye',
             match: 'admin.user-transactions.*',
         });
     }

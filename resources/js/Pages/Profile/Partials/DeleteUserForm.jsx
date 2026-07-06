@@ -1,9 +1,8 @@
-import DangerButton from '@/Components/DangerButton';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import Modal from '@/Components/Modal';
 import PasswordInput from '@/Components/PasswordInput';
-import SecondaryButton from '@/Components/SecondaryButton';
+import Button from '@/Components/ui/Button';
 import { useForm } from '@inertiajs/react';
 import { useRef, useState } from 'react';
 
@@ -49,32 +48,28 @@ export default function DeleteUserForm({ className = '' }) {
         <section className={`space-y-6 ${className}`}>
             <header>
                 <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">
-                    Delete Account
+                    Hapus akun
                 </h2>
 
                 <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                    Once your account is deleted, all of its resources and data
-                    will be permanently deleted. Before deleting your account,
-                    please download any data or information that you wish to
-                    retain.
+                    Setelah akun dihapus, semua data yang terhubung dengan akun
+                    ini akan ikut terhapus permanen.
                 </p>
             </header>
 
-            <DangerButton onClick={confirmUserDeletion}>
-                Delete Account
-            </DangerButton>
+            <Button type="button" variant="danger" onClick={confirmUserDeletion}>
+                Hapus akun
+            </Button>
 
             <Modal show={confirmingUserDeletion} onClose={closeModal}>
                 <form onSubmit={deleteUser} className="p-6">
                     <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">
-                        Are you sure you want to delete your account?
+                        Yakin ingin menghapus akun?
                     </h2>
 
                     <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                        Once your account is deleted, all of its resources and
-                        data will be permanently deleted. Please enter your
-                        password to confirm you would like to permanently delete
-                        your account.
+                        Tindakan ini tidak bisa dibatalkan. Masukkan password
+                        untuk mengonfirmasi penghapusan akun.
                     </p>
 
                     <div className="mt-6">
@@ -92,8 +87,8 @@ export default function DeleteUserForm({ className = '' }) {
                             onChange={(e) =>
                                 setData('password', e.target.value)
                             }
-                            containerClassName="mt-1 w-3/4"
-                            className="block w-full"
+                            containerClassName="mt-1 w-full"
+                            className="block w-full rounded-xl border-gray-300 bg-white px-4 py-3 text-gray-900 placeholder:text-gray-400 focus:border-brand-500 focus:ring-brand-500 dark:border-gray-700 dark:bg-gray-950/70 dark:text-gray-100 dark:placeholder:text-gray-500"
                             isFocused
                             placeholder="Password"
                         />
@@ -105,13 +100,17 @@ export default function DeleteUserForm({ className = '' }) {
                     </div>
 
                     <div className="mt-6 flex justify-end">
-                        <SecondaryButton onClick={closeModal}>
-                            Cancel
-                        </SecondaryButton>
+                        <Button type="button" variant="secondary" onClick={closeModal}>
+                            Batal
+                        </Button>
 
-                        <DangerButton className="ms-3" disabled={processing}>
-                            Delete Account
-                        </DangerButton>
+                        <Button
+                            className="ms-3"
+                            disabled={processing}
+                            variant="danger"
+                        >
+                            Hapus akun
+                        </Button>
                     </div>
                 </form>
             </Modal>

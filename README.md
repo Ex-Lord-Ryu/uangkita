@@ -15,6 +15,7 @@ UangKu adalah aplikasi manajemen keuangan pribadi berbasis Laravel, Inertia, dan
 - [Testing](#testing)
 - [Struktur Proyek](#struktur-proyek)
 - [Catatan Keamanan](#catatan-keamanan)
+- [Release Notes](RELEASE.md)
 
 ## Preview Aplikasi
 
@@ -244,6 +245,7 @@ Pengaturan admin berada di `/admin/settings`.
 | --- | --- | --- |
 | `registration_enabled` | Database `app_settings` | Menyalakan/mematikan registrasi user baru. |
 | `ocr_enabled` | Database `app_settings` | Menyalakan/mematikan fitur scan struk. |
+
 ### 14. Manajemen Feedback Admin
 
 - Admin melihat semua thread feedback.

@@ -529,4 +529,4 @@ Periksa konfigurasi `MAIL_*` di `.env` dan pastikan service SMTP lokal/produksi 
 
 ## Lisensi
 
-Project ini menggunakan lisensi MIT.
+Project ini menggunakan lisensi MIT. Lihat [LICENSE](LICENSE).
